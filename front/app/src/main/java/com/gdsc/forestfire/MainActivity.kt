@@ -39,18 +39,28 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		// api 호출 결과를 List 형태로 넣어드렸습니다 ^^7
-		var apiResult: List<FireInfo> = emptyList()
-		val job = GlobalScope.launch {
-			val apiCaller = ApiCaller()
-			apiResult = apiCaller.getAllForestFireData()
-		}
-
-		// 쓰레드 관련한 문제로 이 코드 블럭 이후에 코드 작성해주세요.
-		runBlocking {
-			job.join()
-		}
+//		var apiResult: List<FireInfo> = emptyList()
+//		val job = GlobalScope.launch {
+//			val apiCaller = ApiCaller()
+//			apiResult = apiCaller.getAllForestFireData()
+//		}
+//
+//		// 쓰레드 관련한 문제로 이 코드 블럭 이후에 코드 작성해주세요.
+//		runBlocking {
+//			job.join()
+//		}
+		val apiResult: List<FireInfo> = listOf(
+			FireInfo(1, "2022-02-04 13:00", 0, 0, 20),
+			FireInfo(2, "2022-02-04 18:00", 0, 0, 20),
+			FireInfo(3, "2022-02-05 03:00", 0, 1, 40),
+			FireInfo(4, "2022-02-05 13:00", 0, 3, 80),
+			FireInfo(5, "2022-02-05 18:00", 0, 2, 60)
+		)
 
 		// 여기부터 apiResult에 값이 들어가있어요.
 		// apiResult를 사용해서 뷰에 그려줍시다.
+		for(i:Int in 1..5){
+
+		}
 	}
 }
