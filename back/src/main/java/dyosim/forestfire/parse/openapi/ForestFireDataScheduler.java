@@ -17,9 +17,9 @@ public class ForestFireDataScheduler {
 		this.forestFireParser = forestFireParser;
 	}
 
-	@Scheduled(cron = "10 * * * * ?")
+	@Scheduled(cron = "0 0 * * * ?")
 	public void scheduleGetDataFromOpenAPI() {
 		List<FFResponse> ffResponses = apiCaller.getResponse();
-		System.out.println(ffResponses.get(0));
+//		System.out.println(ffResponses.get(0));
 	}
 }

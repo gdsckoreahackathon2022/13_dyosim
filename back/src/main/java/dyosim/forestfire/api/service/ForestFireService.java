@@ -19,7 +19,14 @@ public class ForestFireService {
     public ForestFireResponse readOne(int code){
         ForestFireResponse forestFireResponse = new ForestFireResponse();
         forestFireResponse.setData(forestFireRepository.findByCodeAndDateAfter(code, LocalDateTime.now()));
-        System.out.println(forestFireResponse.getData().get(0)); // [ {2,2,}, {234, 4}]
+        return forestFireResponse;
+    }
+
+    public ForestFireResponse readAll(){
+        ForestFireResponse forestFireResponse = new ForestFireResponse();
+        LocalDateTime time = forestFireRepository.findByDateAfter(LocalDateTime.now()).get(0).getDate();
+        forestFireResponse.setData(forestFireRepository.findByDate(time));
+
         return forestFireResponse;
     }
 }

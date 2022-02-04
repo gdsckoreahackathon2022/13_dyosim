@@ -1,0 +1,16 @@
+{
+  "data": [
+{
+"date": "20220201 13",
+"predict": 1,
+"code": 0,
+"meanVal": 45
+},
+{
+"date": "20220201 16",
+"predict": 0,
+"code": 0,
+"meanVal": 20
+}
+]
+}
