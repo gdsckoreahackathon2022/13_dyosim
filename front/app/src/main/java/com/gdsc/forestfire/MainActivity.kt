@@ -5,6 +5,7 @@ import Sub
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,8 +18,8 @@ class MainActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		var dateview  = findViewById<TextView>(R.id.textView)
-		var predictview = findViewById<TextView>(R.id.textView100)
+//		var dateview  = findViewById<TextView>(R.id.textView)
+//		var predictview = findViewById<TextView>(R.id.textView100)
 		val dateItems = listOf("서울", "인천", "경기", "강원", "충북", "충남", "세종", "대전", "경북", "경남", "대구", "부산", "울산", "전북", "전남","광주", "제주" )
 
 		val spinner = findViewById<View>(R.id.spinner) as Spinner
@@ -38,29 +39,29 @@ class MainActivity : AppCompatActivity() {
 		)
 
 
-		spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-			override fun onItemSelected(
-				parent: AdapterView<*>?,
-				view: View?,
-				position: Int,
-				id: Long
-			) {
+//		spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//			override fun onItemSelected(
+//				parent: AdapterView<*>?,
+//				view: View?,
+//				position: Int,
+//				id: Long
+//			) {
+////
+////				for (i in apiResult.indices) {
+////					infoview.text = apiResult[i].date
+////					linearLayout.addView(infoview)
+////				}
+//				dateview.text = apiResult[0].date
+//				predictview.text = apiResult[0].predict.toString()
+//				val test = findViewById<ConstraintLayout>(R.id.item1)
+//				test.setBackgroundColor(Color.parseColor("#111111"))
+//				//TODO("Not yet implemented")
+//			}
 //
-//				for (i in apiResult.indices) {
-//					infoview.text = apiResult[i].date
-//					linearLayout.addView(infoview)
-//				}
-				dateview.text = apiResult[0].date
-				predictview.text = apiResult[0].predict.toString()
-				val test = findViewById<ConstraintLayout>(R.id.item1)
-				test.setBackgroundColor(Color.parseColor("#111111"))
-				//TODO("Not yet implemented")
-			}
-
-			override fun onNothingSelected(parent: AdapterView<*>?) {
-				//TODO("Not yet implemented")
-			}
-		}
+//			override fun onNothingSelected(parent: AdapterView<*>?) {
+//				//TODO("Not yet implemented")
+//			}
+//		}
 
 		// api 호출 결과를 List 형태로 넣어드렸습니다 ^^7
 //		var apiResult: List<FireInfo> = emptyList()
@@ -79,14 +80,32 @@ class MainActivity : AppCompatActivity() {
 		// apiResult를 사용해서 뷰에 그려줍시다.
 
 
-		val n_layout_date = findViewById<TextView>(R.id.textViewSub)
-		println(n_layout_date)
-		for(i:Int in 0..apiResult.size-1){
-			n_layout_date.text = apiResult[i].date
-			val n_layout = Sub(applicationContext)
-			val con = findViewById<View>(R.id.itemLayout) as LinearLayout
+		val layoutInflater = LayoutInflater.from(this);
+		val container = findViewById<LinearLayout>(R.id.itemLayout)
+		for(element in apiResult){
+			val view = layoutInflater.inflate(R.layout.sub_layout, null, false)
 
-			con.addView(n_layout)
+			val text1 = view.findViewById<TextView>(R.id.textViewSub)
+			text1.text = element.date
+
+			val text100 = view.findViewById<TextView>(R.id.textView100)
+			text100.text = element.meanVal.toString()
+
+			val icon = view.findViewById<ImageView>(R.id.icon)
+			if (element.predict == 0) {
+				icon.setImageResource(R.drawable.mark1)
+			}
+			else if (element.predict == 1) {
+				icon.setImageResource(R.drawable.mark2)
+			}
+			else if (element.predict == 2) {
+				icon.setImageResource(R.drawable.mark3)
+			}
+			else {
+				icon.setImageResource(R.drawable.mark4)
+			}
+
+			container.addView(view)
 
 
 		}
