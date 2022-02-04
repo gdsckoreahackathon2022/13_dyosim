@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
 		// 여기부터 apiResult에 값이 들어가있어요.
 		// apiResult를 사용해서 뷰에 그려줍시다.
 		for(i:Int in 1..5){
-
 		}
 	}
 }
