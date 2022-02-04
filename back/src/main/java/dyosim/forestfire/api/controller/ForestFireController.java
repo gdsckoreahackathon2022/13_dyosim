@@ -27,4 +27,9 @@ public class ForestFireController {
         @RequestParam(value = "code")int code){
             return forestFireService.readOne(code);
     }
+
+    @GetMapping("/forestfireall")
+    public ForestFireResponse findForestFireAll(){
+        return forestFireService.readAll();
+    }
 }

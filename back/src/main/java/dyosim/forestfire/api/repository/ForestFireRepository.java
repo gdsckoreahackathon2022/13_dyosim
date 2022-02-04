@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ForestFireRepository extends JpaRepository<ForestFire, Long>{
     List<ForestFire> findByCodeAndDateAfter(int code, LocalDateTime date);
+    List<ForestFire> findByDateAfter(LocalDateTime date);
+    List<ForestFire> findByDate(LocalDateTime date);
 }
