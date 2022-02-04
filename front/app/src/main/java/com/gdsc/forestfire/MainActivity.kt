@@ -11,16 +11,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.io.InputStream
+import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity() {
-
-	var items = arrayOf("대구", "서울", "부산")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-
+		val dateItems = listOf("대구", "서울", "부산")
 		val spinner = findViewById<View>(R.id.spinner) as Spinner
-		val cityAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, items)
+		val cityAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, dateItems)
 		cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
 		spinner.adapter = cityAdapter
 		spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
