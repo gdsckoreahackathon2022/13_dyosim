@@ -7,9 +7,8 @@ import java.lang.Exception
 import kotlin.concurrent.thread
 
 class ApiCaller {
-    fun getAllForestFireData(): List<FireInfo> {
-        val domain = "http://172.20.10.2:8080"
-        val code = 0
+    fun getAllForestFireData(code: Int): List<FireInfo> {
+        val domain = "https://dyosim.herokuapp.com"
         val url = "${domain}/forestfire?code=${code}"
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
