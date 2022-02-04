@@ -1,44 +1,39 @@
 package com.gdsc.forestfire
 
+
+import Sub
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.util.*
+import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.IOException
-import java.io.InputStream
-import org.json.JSONObject
-import java.util.*
+import java.lang.Exception
+import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		var chordList: Vector<Vector<ItemChord?>?>
-		var dateview  = findViewById<TextView>(R.id.textView)
-		var predictview = findViewById<TextView>(R.id.textView100)
 		val dateItems = listOf("서울", "인천", "경기", "강원", "충북", "충남", "세종", "대전", "경북", "경남", "대구", "부산", "울산", "전북", "전남","광주", "제주" )
-		val linearLayout = findViewById<LinearLayout>(R.id.linearLayout)
+
 		val spinner = findViewById<View>(R.id.spinner) as Spinner
 		val cityAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, dateItems)
+
 		cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
 		spinner.adapter = cityAdapter
 
-
-
-		val apiResult: List<FireInfo> = listOf(
-			FireInfo(1, "2022-02-04 13:00", 0, 0, 20),
-			FireInfo(2, "2022-02-04 18:00", 0, 0, 20),
-			FireInfo(3, "2022-02-05 03:00", 0, 1, 40),
-			FireInfo(4, "2022-02-05 13:00", 0, 3, 80),
-			FireInfo(5, "2022-02-05 18:00", 0, 2, 60)
-		)
-		println(apiResult[0].date)
 
 		spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 			override fun onItemSelected(
@@ -47,39 +42,69 @@ class MainActivity : AppCompatActivity() {
 				position: Int,
 				id: Long
 			) {
-//
-//				for (i in apiResult.indices) {
-//					infoview.text = apiResult[i].date
-//					linearLayout.addView(infoview)
-//				}
-				dateview.text = apiResult[0].date
-				predictview.text = apiResult[0].predict.toString()
-				val test = findViewById<ConstraintLayout>(R.id.item1)
-				test.setBackgroundColor(Color.parseColor("#111111"))
-				//TODO("Not yet implemented")
+				renderListView(id.toInt())
 			}
 
 			override fun onNothingSelected(parent: AdapterView<*>?) {
-				//TODO("Not yet implemented")
 			}
 		}
 
-		// api 호출 결과를 List 형태로 넣어드렸습니다 ^^7
-//		var apiResult: List<FireInfo> = emptyList()
-//		val job = GlobalScope.launch {
-//			val apiCaller = ApiCaller()
-//			apiResult = apiCaller.getAllForestFireData()
-//		}
-//
-//		// 쓰레드 관련한 문제로 이 코드 블럭 이후에 코드 작성해주세요.
-//		runBlocking {
-//			job.join()
-//		}
+		renderListView(0)
+	}
+
+	private fun renderListView(code: Int) {
+		var apiResult: List<FireInfo> = emptyList()
+		try {
+			val job = GlobalScope.launch {
+				val apiCaller = ApiCaller()
+				apiResult = apiCaller.getAllForestFireData(code)
+			}
+
+			runBlocking {
+				job.join()
+			}
+		}
+		catch(err: Exception) {
+
+		}
+
+		val layoutInflater = LayoutInflater.from(this);
+		val container = findViewById<LinearLayout>(R.id.itemLayout)
+		container.removeAllViews()
+		for(element in apiResult){
+			val view = layoutInflater.inflate(R.layout.sub_layout, null, false)
+
+			var date = element.date.toString()
+			date = date.substring(5, 13).replace("-", " ").replace("T", " ")
+			var info = date + "시 "
 
 
-		// 여기부터 apiResult에 값이 들어가있어요.
-		// apiResult를 사용해서 뷰에 그려줍시다.
-		for(i:Int in 1..5){
+			val box = view.findViewById<LinearLayout>(R.id.box)
+			val icon = view.findViewById<ImageView>(R.id.icon)
+			if (element.predict == 0) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape1)
+				icon.setImageResource(R.drawable.mark1)
+				info += "안전"
+			}
+			else if (element.predict == 1) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape2)
+				icon.setImageResource(R.drawable.mark2)
+				info += "조심"
+			}
+			else if (element.predict == 2) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape3)
+				icon.setImageResource(R.drawable.mark3)
+				info += "경계"
+			}
+			else {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape4)
+				icon.setImageResource(R.drawable.mark4)
+				info += "위험"
+			}
+			val textInfo = view.findViewById<TextView>(R.id.tvInfo)
+			textInfo.text = info
+
+			container.addView(view)
 		}
 	}
 }
