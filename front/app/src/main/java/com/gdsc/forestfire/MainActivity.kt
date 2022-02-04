@@ -3,6 +3,7 @@ package com.gdsc.forestfire
 
 import Sub
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +12,13 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import java.util.*
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
+import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,13 +54,18 @@ class MainActivity : AppCompatActivity() {
 
 	private fun renderListView(code: Int) {
 		var apiResult: List<FireInfo> = emptyList()
-		val job = GlobalScope.launch {
-			val apiCaller = ApiCaller()
-			apiResult = apiCaller.getAllForestFireData(code)
-		}
+		try {
+			val job = GlobalScope.launch {
+				val apiCaller = ApiCaller()
+				apiResult = apiCaller.getAllForestFireData(code)
+			}
 
-		runBlocking {
-			job.join()
+			runBlocking {
+				job.join()
+			}
+		}
+		catch(err: Exception) {
+
 		}
 
 		val layoutInflater = LayoutInflater.from(this);
@@ -64,25 +74,35 @@ class MainActivity : AppCompatActivity() {
 		for(element in apiResult){
 			val view = layoutInflater.inflate(R.layout.sub_layout, null, false)
 
-			val text1 = view.findViewById<TextView>(R.id.textViewSub)
-			text1.text = element.date
+			var date = element.date.toString()
+			date = date.substring(5, 13).replace("-", " ").replace("T", " ")
+			var info = date + "시 "
 
-			val text100 = view.findViewById<TextView>(R.id.textView100)
-			text100.text = element.meanVal.toString()
 
+			val box = view.findViewById<LinearLayout>(R.id.box)
 			val icon = view.findViewById<ImageView>(R.id.icon)
 			if (element.predict == 0) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape1)
 				icon.setImageResource(R.drawable.mark1)
+				info += "안전"
 			}
 			else if (element.predict == 1) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape2)
 				icon.setImageResource(R.drawable.mark2)
+				info += "조심"
 			}
 			else if (element.predict == 2) {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape3)
 				icon.setImageResource(R.drawable.mark3)
+				info += "경계"
 			}
 			else {
+				box.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape4)
 				icon.setImageResource(R.drawable.mark4)
+				info += "위험"
 			}
+			val textInfo = view.findViewById<TextView>(R.id.tvInfo)
+			textInfo.text = info
 
 			container.addView(view)
 		}
