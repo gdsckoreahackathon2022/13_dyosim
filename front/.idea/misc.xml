@@ -3,10 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudio/13_dyosim/front/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/AndroidStudio/13_dyosim/front/app/src/main/res/drawable/item.xml" value="0.15" />
+        <entry key="..\:/AndroidStudio/13_dyosim/front/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/AndroidStudio/13_dyosim/front/app/src/main/res/layout/sub_layout.xml" value="0.4" />
         <entry key="..\:/AndroidStudio/ForestFire/app/src/main/res/layout/activity_main.xml" value="0.4" />
-        <entry key="..\:/Code/Spring_study/13_dyosim/front/app/src/main/res/drawable/item_safe.xml" value="0.12314814814814815" />
-        <entry key="..\:/Code/Spring_study/13_dyosim/front/app/src/main/res/layout/activity_main.xml" value="0.23641304347826086" />
       </map>
     </option>
   </component>
