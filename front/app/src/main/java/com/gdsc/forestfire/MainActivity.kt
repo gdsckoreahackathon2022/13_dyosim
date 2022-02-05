@@ -1,39 +1,32 @@
 package com.gdsc.forestfire
 
 
-import Sub
-import android.graphics.Color
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import java.util.*
-import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
-import java.time.format.DateTimeFormatter
+import java.lang.reflect.Field
 
 
 class MainActivity : AppCompatActivity() {
 
+	@SuppressLint("DiscouragedPrivateApi")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		val dateItems = listOf("서울", "인천", "경기", "강원", "충북", "충남", "세종", "대전", "경북", "경남", "대구", "부산", "울산", "전북", "전남","광주", "제주" )
 
-		val spinner = findViewById<View>(R.id.spinner) as Spinner
-		val cityAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, dateItems)
-
-		cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+		val spinner = findViewById<Spinner>(R.id.spinner)
+		val cityAdapter: ArrayAdapter<String> =
+			ArrayAdapter<String>(this, R.layout.spinner_item, dateItems)
 		spinner.adapter = cityAdapter
-
 
 		spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 			override fun onItemSelected(
